@@ -3,20 +3,3 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: observe
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: kube-prometheus-stack
-  namespace: observe
-spec:
-  project: observe
-  source:
-    chart: prometheus-community/kube-prometheus-stack
-    repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: 43.1.1
-    helm:
-      releaseName: prometheus-community/kube-prometheus-stack
-  destination:
-    server: "https://kubernetes.default.svc"
-    namespace: observe
