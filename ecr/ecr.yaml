@@ -31,7 +31,7 @@ metadata:
   name: ecr-credentials-sync
   namespace: default
 spec:
-  schedule: "*/10 * * * *"
+  schedule: "0 0 0/6 1/1 * ? *"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
