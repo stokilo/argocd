@@ -38,7 +38,7 @@ spec:
       template:
         spec:
           restartPolicy: Never
-          serviceAccountName: ecr-credentials-sync
+          serviceAccountName: default
           volumes:
             - emptyDir:
                 medium: Memory
