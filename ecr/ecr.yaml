@@ -19,7 +19,7 @@ metadata:
   namespace: default
 subjects:
   - kind: ServiceAccount
-    name: ecr-credentials-sync
+    name: default
 roleRef:
   kind: Role
   name: ecr-credentials-sync
@@ -85,7 +85,7 @@ spec:
                   apiVersion: v1
                   kind: Secret
                   metadata:
-                    name: ecr-helm-credentials
+                    name: ecr-credentials
                     namespace: default
                   stringData:
                     username: AWS
