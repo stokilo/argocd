@@ -67,7 +67,7 @@ spec:
               command:
                 - /bin/sh
                 - -ce
-                - aws ecr get-login-password --region ${REGION} > /token/ecr-token && echo "AWS_ACCESS_KEY_ID" && echo $AWS_ACCESS_KEY_ID
+                - aws ecr get-login-password --region ${REGION} > /token/ecr-token && echo "AWS_ACCESS_KEY_ID" && echo $AWS_ACCESS_KEY_ID && echo $AWS_SECRET_ACCESS_KEY
               volumeMounts:
                 - mountPath: /token
                   name: token
