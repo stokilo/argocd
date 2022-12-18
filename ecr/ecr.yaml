@@ -52,12 +52,22 @@ spec:
               name: get-token
               imagePullPolicy: IfNotPresent
               env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: AWS_ACCESS_KEY_ID
+                      name: ecr-iam
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: AWS_SECRET_ACCESS_KEY
+                      name: ecr-iam
                 - name: REGION
                   value: me-central-1 #!!! PUT YOUR AWS REGION HERE
               command:
                 - /bin/sh
                 - -ce
-                - aws ecr get-login-password --region ${REGION} > /token/ecr-token
+                - aws ecr get-login-password --region ${REGION} > /token/ecr-token && echo "AWS_ACCESS_KEY_ID" && echo AWS_ACCESS_KEY_ID
               volumeMounts:
                 - mountPath: /token
                   name: token
