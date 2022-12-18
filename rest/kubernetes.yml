@@ -47,7 +47,7 @@ metadata:
     app.kubernetes.io/version: "1.0"
   name: demo-app
 imagePullSecrets:
-  - name: regcred
+  - name: ecr-credentials
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
