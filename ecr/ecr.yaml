@@ -1,0 +1,100 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ecr-credentials-sync
+  namespace: default
+rules:
+  - apiGroups: [""]
+    resources:
+      - secrets
+    verbs:
+      - get
+      - create
+      - patch
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ecr-credentials-sync
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: ecr-credentials-sync
+roleRef:
+  kind: Role
+  name: ecr-credentials-sync
+  apiGroup: ""
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ecr-credentials-sync
+  namespace: default
+spec:
+  schedule: "*/10 * * * *"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          serviceAccountName: ecr-credentials-sync
+          volumes:
+            - emptyDir:
+                medium: Memory
+              name: token
+            - name: ecr-iam-secret
+              secret:
+                secretName: ecr-iam
+
+          initContainers:
+            - image: amazon/aws-cli
+              name: get-token
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: REGION
+                  value: me-central-1 #!!! PUT YOUR AWS REGION HERE
+              command:
+                - /bin/sh
+                - -ce
+                - aws ecr get-login-password --region ${REGION} > /token/ecr-token
+              volumeMounts:
+                - mountPath: /token
+                  name: token
+
+          containers:
+            - name: create-secret
+              image: bitnami/kubectl
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SECRET_NAME
+                  value: ecr-credentials
+                - name: ECR_REGISTRY
+                  value: 262280523204.dkr.ecr.me-central-1.amazonaws.com #!!! PUT YOUR ECR REGISTRY HERE
+              command:
+                - /bin/bash
+                - -ce
+                - |-
+                  kubectl -n default create secret docker-registry $SECRET_NAME \
+                    --dry-run=client \
+                    --docker-server="$ECR_REGISTRY" \
+                    --docker-username=AWS \
+                    --docker-password="$(</token/ecr-token)" \
+                    -o yaml | kubectl apply -f - && \
+                  cat <<EOF | kubectl apply -f -
+                  apiVersion: v1
+                  kind: Secret
+                  metadata:
+                    name: ecr-helm-credentials
+                    namespace: default
+                  stringData:
+                    username: AWS
+                    password: $(</token/ecr-token)
+                    enableOCI: "true"
+                    name: "ECR"
+                    type: "helm"
+                    url: "262280523204.dkr.ecr.me-central-1.amazonaws.com/stokilo" #!!! PUT YOUR ECR URL HERE
+                  EOF
+              volumeMounts:
+                - mountPath: /token
+                  name: token
