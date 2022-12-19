@@ -1,0 +1,3 @@
+postgres-operator:
+  image:
+    tag: g3e148ea5
