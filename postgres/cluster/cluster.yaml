@@ -3,7 +3,6 @@ kind: postgresql
 metadata:
   name: acid-minimal-cluster
 spec:
-  enableMasterLoadBalancer: true
   teamId: "acid"
   volume:
     size: 2Gi
