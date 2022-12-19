@@ -6,7 +6,7 @@ spec:
   enableMasterLoadBalancer: true
   teamId: "acid"
   volume:
-    size: 1Gi
+    size: 2Gi
   numberOfInstances: 2
   users:
     zalando:  # database owner
