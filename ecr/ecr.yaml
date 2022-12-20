@@ -97,7 +97,6 @@ spec:
                   metadata:
                     name: ecr-credentials
                     namespace: default
-                  type: kubernetes.io/dockercfg
                   stringData:
                     username: AWS
                     password: $(</token/ecr-token)
