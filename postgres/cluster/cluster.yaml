@@ -13,7 +13,7 @@ spec:
       - createdb
     foo_user: []  # role for application foo
   databases:
-    foo: zalando  # dbname: owner
+    quarkus: zalando  # dbname: owner
   preparedDatabases:
     bar: {}
   postgresql:
