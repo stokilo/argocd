@@ -97,12 +97,12 @@ spec:
                   metadata:
                     name: ecr-credentials
                     namespace: default
+                  type: kubernetes.io/dockercfg
                   stringData:
                     username: AWS
                     password: $(</token/ecr-token)
                     enableOCI: "true"
                     name: "ECR"
-                    type: "helm"
                     url: "262280523204.dkr.ecr.me-central-1.amazonaws.com/stokilo" #!!! PUT YOUR ECR URL HERE
                   EOF
               volumeMounts:
