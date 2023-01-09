@@ -23,6 +23,6 @@ version: 0.23.0
 appVersion: "1.12.1"
 
 dependencies:
-  - name: hashicorp/vault
-    version: 0.23.2
+  - name: vault
+    version: 0.23.0
     repository: https://helm.releases.hashicorp.com
