@@ -3,8 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    app.quarkus.io/commit-id: c1890e1a05db592924e12056000a39fe495a2822
-    app.quarkus.io/build-timestamp: 2023-01-14 - 11:21:16 +0000
+    app.quarkus.io/commit-id: 4c9725519b43f56813631fc2f1131379ee64c971
+    app.quarkus.io/build-timestamp: 2023-01-14 - 11:42:25 +0000
   labels:
     app.kubernetes.io/version: 1.0.0-SNAPSHOT
     app.kubernetes.io/name: qk8s
@@ -18,8 +18,8 @@ spec:
   template:
     metadata:
       annotations:
-        app.quarkus.io/commit-id: c1890e1a05db592924e12056000a39fe495a2822
-        app.quarkus.io/build-timestamp: 2023-01-14 - 11:21:16 +0000
+        app.quarkus.io/commit-id: 4c9725519b43f56813631fc2f1131379ee64c971
+        app.quarkus.io/build-timestamp: 2023-01-14 - 11:42:25 +0000
       labels:
         app.kubernetes.io/version: 1.0.0-SNAPSHOT
         app.kubernetes.io/name: qk8s
@@ -30,16 +30,19 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: qk9s-aws-secret
-                  key: AWS_ACCESS_KEY_ID
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: qk9s-aws-secret
                   key: AWS_SECRET_ACCESS_KEY
+                  name: qk9s-aws-secret
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_ACCESS_KEY_ID
+                  name: qk9s-aws-secret
+          envFrom:
+            - secretRef:
+                name: qk9s-aws-secret
           image: 262280523204.dkr.ecr.me-central-1.amazonaws.com/qk8s:latest
           imagePullPolicy: Always
           name: qk8s
@@ -50,11 +53,34 @@ spec:
       serviceAccountName: qk8s
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    app.quarkus.io/commit-id: 4c9725519b43f56813631fc2f1131379ee64c971
+    app.quarkus.io/build-timestamp: 2023-01-14 - 11:42:25 +0000
+  labels:
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/name: qk8s
+  name: qk8s
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: qk8s-view
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: view
+subjects:
+  - kind: ServiceAccount
+    name: qk8s
+---
+apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    app.quarkus.io/commit-id: c1890e1a05db592924e12056000a39fe495a2822
-    app.quarkus.io/build-timestamp: 2023-01-14 - 11:21:16 +0000
+    app.quarkus.io/commit-id: 4c9725519b43f56813631fc2f1131379ee64c971
+    app.quarkus.io/build-timestamp: 2023-01-14 - 11:42:25 +0000
   labels:
     app.kubernetes.io/name: qk8s
     app.kubernetes.io/version: 1.0.0-SNAPSHOT
@@ -69,28 +95,3 @@ spec:
     app.kubernetes.io/name: qk8s
     app.kubernetes.io/version: 1.0.0-SNAPSHOT
   type: ClusterIP
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  annotations:
-    app.quarkus.io/commit-id: c1890e1a05db592924e12056000a39fe495a2822
-    app.quarkus.io/build-timestamp: 2023-01-14 - 11:21:16 +0000
-  labels:
-    app.kubernetes.io/version: 1.0.0-SNAPSHOT
-    app.kubernetes.io/name: qk8s
-  name: qk8s
-imagePullSecrets:
-  - name: qk9s-ecr-secret
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: qk8s-view
-roleRef:
-  kind: ClusterRole
-  apiGroup: rbac.authorization.k8s.io
-  name: view
-subjects:
-  - kind: ServiceAccount
-    name: qk8s
