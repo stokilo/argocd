@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.quarkus.io/commit-id: 74ca29aef871c9b1d9c57cc307801b87103c5960
+    app.quarkus.io/build-timestamp: 2023-01-14 - 11:16:24 +0000
+  labels:
+    app.kubernetes.io/name: k8sclient
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  name: k8sclient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: k8sclient
+      app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  template:
+    metadata:
+      annotations:
+        app.quarkus.io/commit-id: 74ca29aef871c9b1d9c57cc307801b87103c5960
+        app.quarkus.io/build-timestamp: 2023-01-14 - 11:16:24 +0000
+      labels:
+        app.kubernetes.io/name: k8sclient
+        app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    spec:
+      containers:
+        - env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          image: 262280523204.dkr.ecr.me-central-1.amazonaws.com/qk8s:latest
+          imagePullPolicy: Always
+          name: k8sclient
+          ports:
+            - containerPort: 8081
+              name: http
+              protocol: TCP
+      serviceAccountName: k8sclient
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.quarkus.io/commit-id: 74ca29aef871c9b1d9c57cc307801b87103c5960
+    app.quarkus.io/build-timestamp: 2023-01-14 - 11:16:24 +0000
+  labels:
+    app.kubernetes.io/name: k8sclient
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  name: k8sclient
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    app.kubernetes.io/name: k8sclient
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    app.quarkus.io/commit-id: 74ca29aef871c9b1d9c57cc307801b87103c5960
+    app.quarkus.io/build-timestamp: 2023-01-14 - 11:16:24 +0000
+  labels:
+    app.kubernetes.io/name: k8sclient
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  name: k8sclient
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: k8sclient-view
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: view
+subjects:
+  - kind: ServiceAccount
+    name: k8sclient
