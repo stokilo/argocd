@@ -70,6 +70,8 @@ metadata:
     app.kubernetes.io/name: k8sclient
     app.kubernetes.io/version: 1.0.0-SNAPSHOT
   name: k8sclient
+imagePullSecrets:
+  - name: qk9s-ecr-secret
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
