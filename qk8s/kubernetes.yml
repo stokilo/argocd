@@ -30,6 +30,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: qk9s-aws-secret
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: qk9s-aws-secret
+                  key: AWS_SECRET_ACCESS_KEY
           image: 262280523204.dkr.ecr.me-central-1.amazonaws.com/qk8s:latest
           imagePullPolicy: Always
           name: qk8s
