@@ -25,4 +25,4 @@ appVersion: "0.21.1"
 dependencies:
   - name: actions-runner-controller
     version: 0.21.1
-    repository: https://actions-runner-controller.github.io/actions-runner-controller
+    repository: https://actions-runner-controller.github.io
