@@ -7,7 +7,7 @@ spec:
     - name: WAL_S3_BUCKET
       value: wal-s3-backup-bucket
     - name: AWS_REGION
-      value: ap-south-1
+      value: me-central-1
   teamId: "acid"
   volume:
     size: 2Gi
