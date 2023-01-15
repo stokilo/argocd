@@ -1,0 +1,4 @@
+authSecret:
+  name: github-pat
+  github_token: replace-me-later
+  create: true
