@@ -5,21 +5,21 @@ metadata:
   annotations:
     app.quarkus.io/build-timestamp: 2022-12-17 - 13:39:00 +0000
   labels:
-    app.kubernetes.io/name: demo-app
+    app.kubernetes.io/name: qk8s-rest-db
     app.kubernetes.io/version: "1.0"
-  name: demo-app
+  name: qk8s-rest-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: demo-app
+      app.kubernetes.io/name: qk8s-rest-db
       app.kubernetes.io/version: "1.0"
   template:
     metadata:
       annotations:
         app.quarkus.io/build-timestamp: 2022-12-17 - 13:39:00 +0000
       labels:
-        app.kubernetes.io/name: demo-app
+        app.kubernetes.io/name: qk8s-rest-db
         app.kubernetes.io/version: "1.0"
     spec:
       containers:
@@ -28,14 +28,14 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: 262280523204.dkr.ecr.me-central-1.amazonaws.com/stokilo:6.0
+          image: 262280523204.dkr.ecr.me-central-1.amazonaws.com/qk8s-rest-db:6.0
           imagePullPolicy: Always
-          name: demo-app
+          name: qk8s-rest-db
           ports:
             - containerPort: 8080
               name: http
               protocol: TCP
-      serviceAccountName: demo-app
+      serviceAccountName: qk8s-rest-db
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -43,23 +43,23 @@ metadata:
   annotations:
     app.quarkus.io/build-timestamp: 2022-12-17 - 13:39:00 +0000
   labels:
-    app.kubernetes.io/name: demo-app
+    app.kubernetes.io/name: qk8s-rest-db
     app.kubernetes.io/version: "1.0"
-  name: demo-app
+  name: qk8s-rest-db
 imagePullSecrets:
   - name: qk9s-ecr-secret
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: demo-app-view
+  name: qk8s-rest-db-view
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
   name: view
 subjects:
   - kind: ServiceAccount
-    name: demo-app
+    name: qk8s-rest-db
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
@@ -81,7 +81,7 @@ roleRef:
   apiGroup: ""
 subjects:
   - kind: ServiceAccount
-    name: demo-app
+    name: qk8s-rest-db
 ---
 apiVersion: v1
 kind: Service
@@ -89,9 +89,9 @@ metadata:
   annotations:
     app.quarkus.io/build-timestamp: 2022-12-17 - 13:39:00 +0000
   labels:
-    app.kubernetes.io/name: demo-app
+    app.kubernetes.io/name: qk8s-rest-db
     app.kubernetes.io/version: "1.0"
-  name: demo-app
+  name: qk8s-rest-db
 spec:
   ports:
     - name: http
@@ -99,6 +99,6 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app.kubernetes.io/name: demo-app
+    app.kubernetes.io/name: qk8s-rest-db
     app.kubernetes.io/version: "1.0"
   type: ClusterIP
