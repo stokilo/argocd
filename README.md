@@ -1,6 +1,6 @@
 #### Installation
 
-Follow argo [basic installation guid](https://argo-cd.readthedocs.io/en/stable/getting_started/)
+Follow argo [basic installation guide](https://argo-cd.readthedocs.io/en/stable/getting_started/)
 
 Then each folder contains argo application, start in order i.e. for vault:
 
